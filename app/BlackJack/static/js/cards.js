@@ -76,6 +76,10 @@ class Card {
         return this.img_link;
     }
 
+    get_val(){
+        return this.val
+    }
+
 }
 
 var two_Clubs = new Card(TWO_CLUBS, 2, "Clubs");
@@ -166,9 +170,6 @@ class Deck{
 
         }
 
-    random_func(){
-        alert("test");
-    }
     }
 
 
