@@ -72,6 +72,10 @@ class Card {
         this.suite = s;
     }
 
+    get_img(){
+        return this.img_link;
+    }
+
 }
 
 var two_Clubs = new Card(TWO_CLUBS, 2, "Clubs");
@@ -156,35 +160,19 @@ class Deck{
             }
         }
 
-    render_all(){
+    remove_card(){
 
-        var deck_container = document.getElementById("deck");
-
-        for (var i=0; i < this.cards.length; i++){
-            var card = document.createElement("IMG");
-            card.setAttribute("src", this.cards[i].img_link);
-            deck_container.appendChild(card);
-            }
+        return this.cards.pop();
 
         }
 
-    render_a_hand(){
-
-        var deck_container = document.getElementById("deck");
-
-        for (var i=0; i < 2; i++){
-            var card = document.createElement("IMG");
-            card.setAttribute("src", this.cards[i].img_link);
-            deck_container.appendChild(card);
-            }
-
-        }
-
+    random_func(){
+        alert("test");
+    }
     }
 
-var deck = new Deck();
-deck.shuffle();
-deck.render_a_hand();
+
+
 
 
 
