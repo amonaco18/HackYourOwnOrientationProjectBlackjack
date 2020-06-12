@@ -11,6 +11,10 @@ class Player{
         this.hand.push(card);
     }
 
+    reset_hand(){
+        this.hand.length = 0;
+    }
+
     check_bust(){
         if (this.round_score > 21){
             this.bust = true;
@@ -20,6 +24,10 @@ class Player{
 
     get_round_score(){
         return this.round_score;
+    }
+
+    reset_round_score(){
+        this.round_score = 0;
     }
 
     get_total_score(){
