@@ -2,7 +2,6 @@ class Computer extends Player {
 
     constructor(){
         super();
-        this.state = true;
     }
 
     make_decision(){
@@ -13,11 +12,4 @@ class Computer extends Player {
         }
     }
 
-    set_state(bool){
-        this.state = bool;
-    }
-
-    get_state(){
-        return this.state;
-    }
 }
