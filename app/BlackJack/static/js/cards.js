@@ -72,6 +72,14 @@ class Card {
         this.suite = s;
     }
 
+    ace_to_one(){
+        this.val = 1;
+    }
+
+    flip_card_img(){
+        this.img_link = "/static/imgs/";
+    }
+
     get_img(){
         return this.img_link;
     }
@@ -171,9 +179,4 @@ class Deck{
         }
 
     }
-
-
-
-
-
 

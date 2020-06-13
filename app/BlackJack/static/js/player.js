@@ -5,6 +5,7 @@ class Player{
         this.total_score = 0;
         this.hand = [];
         this.bust = false;
+        this.is_turn = true;
     }
 
     set_hand(card){
@@ -40,5 +41,13 @@ class Player{
 
     set_total_score(){
         this.total_score += 1;
+    }
+
+    get_is_turn(){
+        return this.is_turn;
+    }
+
+    set_is_turn(bool){
+        this.is_turn = bool;
     }
 }
