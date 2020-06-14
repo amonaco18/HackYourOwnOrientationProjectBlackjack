@@ -31,11 +31,10 @@ class Player{
                 this.round_score -= 10;
             }
         }
-        var bust = false;
-        if (this.round_score > 21){
-            bust = true;
-        return bust;
-        }
+
+        document.getElementById("user_round_score").innerHTML = "Your score is currently: " + this.round_score;
+
+        return this.round_score > 21;
     }
 
     get_round_score(){
