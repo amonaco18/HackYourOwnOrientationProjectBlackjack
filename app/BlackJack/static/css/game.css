@@ -13,10 +13,12 @@ button{
 }
 
 #user_div{
+    display: block;
     padding: 3rem;
 }
 
 #cpu_div{
+    display: block;
     padding: 3rem;
     text-align: center;
 }
