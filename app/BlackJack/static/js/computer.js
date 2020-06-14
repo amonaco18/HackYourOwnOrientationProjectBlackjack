@@ -12,4 +12,8 @@ class Computer extends Player {
         }
     }
 
+    get_first_card(){
+        return this.hand[0];
+    }
+
 }

@@ -9,7 +9,12 @@ class App{
 
 		for (var i = 0; i < 2; i++){
 		    this.add_user_hand();
-		    this.add_computer_hand();
+		    if(i==0){
+		        var flip = true;
+		    } else{
+		        var flip = false;
+		    }
+		    this.add_computer_hand(flip);
 		}
 
         this.update_message(this.score_message);
@@ -44,7 +49,7 @@ class App{
 		user_hand.appendChild(new_img);
 	}
 
-	add_computer_hand(){
+	add_computer_hand(flip){
 		var computer_card = this.deck.remove_card();
 
 		this.computer.set_hand(computer_card);
@@ -53,6 +58,11 @@ class App{
     	var computer_hand = document.getElementById("cpu_cards");
 
     	var new_img = document.createElement("IMG");
+
+    	if(flip == true){
+    	    computer_card.flip_card_img();
+    	    new_img.setAttribute("id", "flipped_card")
+    	}
     	new_img.setAttribute("src", computer_card.get_img());
 
     	computer_hand.appendChild(new_img);
@@ -76,15 +86,25 @@ class App{
          //re-init hands
          for (var i = 0; i < 2; i++){
 		    this.add_user_hand();
-		    this.add_computer_hand();
+		    if(i==0){
+		        var flip = true;
+		    } else{
+		        var flip = false;
+		    }
+		    this.add_computer_hand(flip);
 		}
-
 	}
 
-	on_stand(){
+	async on_stand(){
+	    var img = document.getElementById("flipped_card");
+	    this.computer.get_first_card().flip_card_img();
+	    img.setAttribute("src", this.computer.get_first_card().get_img());
+
+        //await sleep(200);
+
 	    var comp_decision = this.computer.make_decision();
 	    while(comp_decision == true){
-	        this.add_computer_hand();
+	        this.add_computer_hand(false);
             comp_decision = this.computer.make_decision();
 	    }
 	}
@@ -112,7 +132,7 @@ class App{
 	end_round(game_code){
 	    switch(game_code) {
             case 0:
-                alert("Player busted at " + this.player.get_round_score());
+                //alert("Player busted at " + this.player.get_round_score());
                 this.computer.set_total_score();
                 this.player.reset_round_score();
                 this.computer.reset_round_score();
@@ -122,7 +142,7 @@ class App{
             break;
 
             case 1:
-                alert("Player jackpot!");
+                //alert("Player jackpot!");
                 this.player.set_total_score();
                 this.player.reset_round_score();
                 this.computer.reset_round_score();
@@ -132,7 +152,7 @@ class App{
             break;
 
             case 2:
-                alert("Computer busted at " + this.computer.get_round_score());
+                //alert("Computer busted at " + this.computer.get_round_score());
                 this.player.set_total_score();
                 this.computer.reset_round_score();
                 this.player.reset_round_score();
@@ -142,7 +162,7 @@ class App{
             break;
 
             case 3:
-                alert("Computer jackpot!");
+                //alert("Computer jackpot!");
                 this.computer.set_total_score();
                 this.player.reset_round_score();
                 this.computer.reset_round_score();
@@ -152,9 +172,9 @@ class App{
             break;
 
             case 4:
-                alert("Both players stand... calculating winner");
+                //alert("Both players stand... calculating winner");
                 if(this.player.get_round_score() > this.computer.get_round_score()){
-                    alert("Player wins round! Player: " + this.player.get_round_score() + " Computer: " + this.computer.get_round_score());
+                    //alert("Player wins round! Player: " + this.player.get_round_score() + " Computer: " + this.computer.get_round_score());
                     this.player.set_total_score();
                     this.player.reset_round_score();
                     this.computer.reset_round_score();
@@ -162,7 +182,7 @@ class App{
                     this.reset_hands();
                     this.update_message("Player: " + this.player.get_total_score().toString() + " Computer: " + this.computer.get_total_score().toString());
                 } else if (this.player.get_round_score() < this.computer.get_round_score()){
-                    alert("Computer wins round! Player: " + this.player.get_round_score() + " Computer: " + this.computer.get_round_score());
+                    //alert("Computer wins round! Player: " + this.player.get_round_score() + " Computer: " + this.computer.get_round_score());
                     this.computer.set_total_score();
                     this.player.reset_round_score();
                     this.computer.reset_round_score();
@@ -170,7 +190,7 @@ class App{
                     this.reset_hands();
                     this.update_message("Player: " + this.player.get_total_score().toString() + " Computer: " + this.computer.get_total_score().toString());
                 } else {
-                    alert("Draw! Player: " + this.player.get_round_score() + " Computer: " + this.computer.get_round_score());
+                    //alert("Draw! Player: " + this.player.get_round_score() + " Computer: " + this.computer.get_round_score());
                     this.player.reset_round_score();
                     this.computer.reset_round_score();
                     this.player.set_is_turn(true);
@@ -213,6 +233,4 @@ document.getElementById("hit_btn").addEventListener("click", async function(){
         alert("Hey.. not your turn.");
     }
 });
-
-
 

@@ -70,6 +70,8 @@ class Card {
         this.img_link = src;
         this.val = val;
         this.suite = s;
+        this.img_side = 2;
+        this.old_img_link = src;
     }
 
     ace_to_one(){
@@ -77,7 +79,15 @@ class Card {
     }
 
     flip_card_img(){
-        this.img_link = "/static/imgs/";
+        if (this.img_side  % 2 == 0){
+            this.img_link = "static/imgs/back_of_card.svg";
+            this.img_side += 1;
+        }
+        else{
+            this.img_link = this.old_img_link;
+            this.old_img_link = this.img_link;
+            this.img_side += 1;
+        }
     }
 
     get_img(){
