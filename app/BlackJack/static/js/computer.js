@@ -5,7 +5,7 @@ class Computer extends Player {
     }
 
     make_decision(player_two){
-        if(this.get_round_score() < 17 || this.get_round_score() < player_two.get_round_score()){
+        if(this.get_round_score() < 17 || this.get_round_score() <= player_two.get_round_score()){
             return true;
         } else{
             return false;

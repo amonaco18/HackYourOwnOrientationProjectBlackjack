@@ -20,7 +20,7 @@ class App{
         this.update_message(this.score_message);
 
         document.getElementById("user_round_score").innerHTML = this.player.round_score;
-        document.getElementById("cpu_round_score").innerHTML = this.computer.round_score;
+        document.getElementById("cpu_round_score").innerHTML = this.computer.round_score - this.computer.hand[0].val;
 
         if(this.player.get_round_score() == 21){
             this.end_round(1);
@@ -56,6 +56,9 @@ class App{
 	}
 
 	add_computer_hand(flip){
+
+        document.getElementById("cpu_round_score").innerHTML = this.computer.round_score;
+
 		var computer_card = this.deck.remove_card();
 
 		this.computer.set_hand(computer_card);
@@ -137,6 +140,8 @@ class App{
 	    this.computer.get_first_card().flip_card_img_front();
 	    img.setAttribute("src", this.computer.get_first_card().get_img());
 
+        document.getElementById("cpu_round_score").innerHTML = this.computer.round_score;
+        
         await sleep(200);
 
 	    var comp_decision = this.computer.make_decision(this.player);
