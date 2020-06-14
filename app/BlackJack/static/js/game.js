@@ -264,6 +264,14 @@ document.getElementById("stand_btn").addEventListener("click", async function(){
                                 computer_hand.removeChild(computer_hand.lastChild);
                             }
                     }
+        await sleep(500);
+        if(app.player.get_round_score() == 21){
+            app.end_round(1);
+        }
+
+        if(app.computer.get_round_score() == 21){
+            app.end_round(3);
+        }
 
     } else {
         alert("Hey.. not your turn.");
@@ -278,7 +286,7 @@ document.getElementById("hit_btn").addEventListener("click", async function(){
             alert("Out of cards. Reshuffling..")
             app.reset_hands();
         }
-        await sleep(2200);
+        await sleep(1000);
         flag = app.check_round_end();
         app.end_round(flag);
     } else {
