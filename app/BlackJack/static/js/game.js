@@ -131,17 +131,17 @@ class App{
 
         await sleep(200);
 
-	    var comp_decision = this.computer.make_decision();
+	    var comp_decision = this.computer.make_decision(this.player);
 	    while(comp_decision == true){
-	        await sleep(800);
+	        await sleep(500);
 	        this.add_computer_hand(false);
-            comp_decision = this.computer.make_decision();
+            comp_decision = this.computer.make_decision(this.player);
 	    }
 	}
 
 	check_round_end(){
 	    if (this.player.get_is_turn() == true){
-	        if(this.player.check_bust()){
+	        if(this.player.check_bust() == true){
 	            return 0;
 	        } else if(this.player.get_round_score() == 21){
 	            return 1;
@@ -162,7 +162,7 @@ class App{
 	end_round(game_code){
 	    switch(game_code) {
             case 0:
-                //alert("Player busted at " + this.player.get_round_score());
+                console.log("Player busted at " + this.player.get_round_score());
                 this.computer.set_total_score();
                 this.player.reset_round_score();
                 this.computer.reset_round_score();
@@ -172,7 +172,7 @@ class App{
             break;
 
             case 1:
-                //alert("Player jackpot!");
+                console.log("Player jackpot!");
                 this.player.set_total_score();
                 this.player.reset_round_score();
                 this.computer.reset_round_score();
@@ -182,7 +182,7 @@ class App{
             break;
 
             case 2:
-                //alert("Computer busted at " + this.computer.get_round_score());
+                console.log("Computer busted at " + this.computer.get_round_score());
                 this.player.set_total_score();
                 this.computer.reset_round_score();
                 this.player.reset_round_score();
@@ -192,7 +192,7 @@ class App{
             break;
 
             case 3:
-                //alert("Computer jackpot!");
+                console.log("Computer jackpot!");
                 this.computer.set_total_score();
                 this.player.reset_round_score();
                 this.computer.reset_round_score();
@@ -202,17 +202,25 @@ class App{
             break;
 
             case 4:
-                //alert("Both players stand... calculating winner");
+                console.log("Both players stand... calculating winner");
                 if(this.player.get_round_score() > this.computer.get_round_score()){
-                    //alert("Player wins round! Player: " + this.player.get_round_score() + " Computer: " + this.computer.get_round_score());
+                    console.log("Player wins round! Player: " + this.player.get_round_score() + " Computer: " + this.computer.get_round_score());
                     this.player.set_total_score();
                     this.player.reset_round_score();
                     this.computer.reset_round_score();
                     this.player.set_is_turn(true);
                     this.reset_hands();
+                    //random bug patch..
+                    if (this.computer.get_hand_length() > 2){
+                           var computer_hand = document.getElementById("cpu_cards");
+                            while (this.computer.get_hand_length() > 2) {
+                                this.computer.remove_card();
+                                computer_hand.removeChild(computer_hand.lastChild);
+                            }
+                    }
                     this.update_message("Player: " + this.player.get_total_score().toString() + " Computer: " + this.computer.get_total_score().toString());
                 } else if (this.player.get_round_score() < this.computer.get_round_score()){
-                    //alert("Computer wins round! Player: " + this.player.get_round_score() + " Computer: " + this.computer.get_round_score());
+                    console.log("Computer wins round! Player: " + this.player.get_round_score() + " Computer: " + this.computer.get_round_score());
                     this.computer.set_total_score();
                     this.player.reset_round_score();
                     this.computer.reset_round_score();
@@ -220,7 +228,7 @@ class App{
                     this.reset_hands();
                     this.update_message("Player: " + this.player.get_total_score().toString() + " Computer: " + this.computer.get_total_score().toString());
                 } else {
-                    //alert("Draw! Player: " + this.player.get_round_score() + " Computer: " + this.computer.get_round_score());
+                    console.log("Draw! Player: " + this.player.get_round_score() + " Computer: " + this.computer.get_round_score());
                     this.player.reset_round_score();
                     this.computer.reset_round_score();
                     this.player.set_is_turn(true);
@@ -245,7 +253,7 @@ document.getElementById("stand_btn").addEventListener("click", async function(){
     if(app.player.get_is_turn() == true){
         app.player.set_is_turn(false);
         app.on_stand();
-        await sleep(4000);
+        await sleep(3600);
         flag = app.check_round_end();
         app.end_round(flag);
     } else {

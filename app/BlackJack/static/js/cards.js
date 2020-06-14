@@ -81,15 +81,6 @@ class Card {
 
     flip_card_img_back(){
         this.img_link = this.back_card_img;
-        /*if (this.img_side  % 2 == 0){
-            this.img_link = "static/imgs/back_of_card.svg";
-            this.img_side += 1;
-        }
-        else{
-            this.img_link = this.old_img_link;
-            this.old_img_link = this.img_link;
-            this.img_side += 1;
-        }*/
     }
 
     flip_card_img_front(){
