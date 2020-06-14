@@ -4,7 +4,7 @@ class Player{
         this.round_score = 0;
         this.total_score = 0;
         this.hand = [];
-        this.bust = false;
+        this.jackpot = false;
         this.is_turn = true;
     }
 
@@ -17,9 +17,10 @@ class Player{
     }
 
     check_bust(){
+        var bust = false;
         if (this.round_score > 21){
-            this.bust = true;
-        return this.bust;
+            bust = true;
+        return bust;
         }
     }
 

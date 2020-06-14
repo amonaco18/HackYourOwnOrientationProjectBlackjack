@@ -5,7 +5,6 @@ class App{
 		this.player = new Player();
 		this.computer = new Computer();
 		this.deck.shuffle();
-		this.winner = "None"
 		this.score_message = "Player: " + this.player.get_total_score().toString() + " Computer: " + this.computer.get_total_score().toString();
 
 		for (var i = 0; i < 2; i++){
@@ -15,13 +14,14 @@ class App{
 
         this.update_message(this.score_message);
 
-        if(this.player.get_round_score == 21){
+        if(this.player.get_round_score() == 21){
             this.end_round(1);
         }
 
-        if(this.computer.get_round_score == 21){
+        if(this.computer.get_round_score() == 21){
             this.end_round(3);
         }
+
 	}
 
 	update_message(mes){
@@ -56,8 +56,6 @@ class App{
     	new_img.setAttribute("src", computer_card.get_img());
 
     	computer_hand.appendChild(new_img);
-    	console.log(this.computer.hand);
-    	console.log(this.computer.get_round_score());
 	}
 
 	reset_hands(){
@@ -83,14 +81,9 @@ class App{
 
 	}
 
-	on_hit(){
-        this.add_user_hand();
-	}
-
 	on_stand(){
 	    var comp_decision = this.computer.make_decision();
 	    while(comp_decision == true){
-	        alert("Computer is making a decision.")
 	        this.add_computer_hand();
             comp_decision = this.computer.make_decision();
 	    }
@@ -98,25 +91,20 @@ class App{
 
 	check_round_end(){
 	    if (this.player.get_is_turn() == true){
-	        var player_bust = this.player.check_bust();
-	        var player_jackpot = false;
-	        if(this.player.get_round_score() == 21){
-	            player_jackpot = true;
-	        }
-	        if(player_bust == true){
-	            this.end_round(0);
-	        } else if(player_jackpot == true){
-	            this.end_round(1);
+	        if(this.player.check_bust()){
+	            return 0;
+	        } else if(this.player.get_round_score() == 21){
+	            return 1;
 	        } else{
-	            alert("You hit, choose to hit again or stand.");
+	            //pass
 	        }
 	    } else {
 	         if (this.computer.check_bust() == true){
-	            this.end_round(2);
+	            return 2;
 	        } else if (this.computer.get_round_score() == 21){
-	            this.end_round(3);
+	            return 3;
 	        } else{
-	            this.end_round(4);;
+	            return 4;
 	        }
 	    }
 	}
@@ -200,24 +188,31 @@ window.addEventListener("load", () => {
 	app = new App();
 });
 
-document.getElementById("stand_btn").addEventListener("click", function(){
+const sleep = ms => new Promise(res => setTimeout(res, ms));
+
+
+document.getElementById("stand_btn").addEventListener("click", async function(){
     if(app.player.get_is_turn() == true){
         app.player.set_is_turn(false);
         app.on_stand();
-        app.check_round_end();
+        await sleep(200);
+        flag = app.check_round_end();
+        app.end_round(flag);
     } else {
         alert("Hey.. not your turn.");
     }
 });
 
-document.getElementById("hit_btn").addEventListener("click", function(){
+document.getElementById("hit_btn").addEventListener("click", async function(){
     if(app.player.get_is_turn() == true) {
-        app.on_hit();
-        app.check_round_end();
-
+        app.add_user_hand();
+        await sleep(200);
+        flag = app.check_round_end();
+        app.end_round(flag);
     } else {
         alert("Hey.. not your turn.");
     }
 });
+
 
 
