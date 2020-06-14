@@ -60,7 +60,7 @@ class App{
     	var new_img = document.createElement("IMG");
 
     	if(flip == true){
-    	    computer_card.flip_card_img();
+    	    computer_card.flip_card_img_back();
     	    new_img.setAttribute("id", "flipped_card")
     	}
     	new_img.setAttribute("src", computer_card.get_img());
@@ -78,32 +78,62 @@ class App{
             user_hand.removeChild(user_hand.lastChild);
          }
 
-         var computer_hand = document.getElementById("cpu_cards");
-         while (computer_hand.firstChild) {
-            computer_hand.removeChild(computer_hand.lastChild);
-         }
+        var computer_hand = document.getElementById("cpu_cards");
+        while (computer_hand.firstChild) {
+           computer_hand.removeChild(computer_hand.lastChild);
+        }
 
-         //re-init hands
-         for (var i = 0; i < 2; i++){
-		    this.add_user_hand();
-		    if(i==0){
-		        var flip = true;
-		    } else{
-		        var flip = false;
+        //re-init hands
+        try{
+            for (var i = 0; i < 2; i++){
+		        this.add_user_hand();
+		        if(i==0){
+		            var flip = true;
+		        } else{
+		            var flip = false;
+		        }
+		        this.add_computer_hand(flip);
+		        }
+		}catch(error){
+		     console.log("Reshuffling Deck..");
+		     this.player.reset_hand();
+	         this.computer.reset_hand();
+		     this.deck = new Deck();
+		     this.deck.face_cards();
+		     this.deck.shuffle();
+
+		     var user_hand = document.getElementById("user_cards");
+             while (user_hand.firstChild) {
+                 user_hand.removeChild(user_hand.lastChild);
+             }
+
+             var computer_hand = document.getElementById("cpu_cards");
+             while (computer_hand.firstChild) {
+                computer_hand.removeChild(computer_hand.lastChild);
+             }
+
+		     for (var i = 0; i < 2; i++){
+		        this.add_user_hand();
+		        if(i==0){
+		            var flip = true;
+		        } else{
+		            var flip = false;
+		        }
+		        this.add_computer_hand(flip);
+		        }
 		    }
-		    this.add_computer_hand(flip);
-		}
 	}
 
 	async on_stand(){
 	    var img = document.getElementById("flipped_card");
-	    this.computer.get_first_card().flip_card_img();
+	    this.computer.get_first_card().flip_card_img_front();
 	    img.setAttribute("src", this.computer.get_first_card().get_img());
 
-        //await sleep(200);
+        await sleep(200);
 
 	    var comp_decision = this.computer.make_decision();
 	    while(comp_decision == true){
+	        await sleep(800);
 	        this.add_computer_hand(false);
             comp_decision = this.computer.make_decision();
 	    }
@@ -215,7 +245,7 @@ document.getElementById("stand_btn").addEventListener("click", async function(){
     if(app.player.get_is_turn() == true){
         app.player.set_is_turn(false);
         app.on_stand();
-        await sleep(200);
+        await sleep(4000);
         flag = app.check_round_end();
         app.end_round(flag);
     } else {
@@ -225,8 +255,13 @@ document.getElementById("stand_btn").addEventListener("click", async function(){
 
 document.getElementById("hit_btn").addEventListener("click", async function(){
     if(app.player.get_is_turn() == true) {
-        app.add_user_hand();
-        await sleep(200);
+        try{
+            app.add_user_hand();
+        } catch(error){
+            alert("Out of cards. Reshuffling..")
+            app.reset_hands();
+        }
+        await sleep(1800);
         flag = app.check_round_end();
         app.end_round(flag);
     } else {

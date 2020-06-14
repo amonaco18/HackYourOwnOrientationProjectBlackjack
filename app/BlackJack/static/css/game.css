@@ -2,6 +2,11 @@ img{
     width:9rem;
 }
 
+button{
+    width: 7rem;
+    height:4rem;
+}
+
 .buttons{
     float:right;
     width:30rem;
