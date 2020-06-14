@@ -19,13 +19,8 @@ class App{
 
         this.update_message(this.score_message);
 
-<<<<<<< HEAD
-        document.getElementById("user_round_score").innerHTML = this.player.round_score;
-        document.getElementById("cpu_round_score").innerHTML = this.computer.round_score - this.computer.hand[0].val;
-=======
         document.getElementById("user_round_score").innerHTML = "Your score is currently: " + this.player.round_score;
         document.getElementById("cpu_round_score").innerHTML = this.computer.round_score;
->>>>>>> d0da0dd92d71d363e59d1892c414dc5ee8cf1208
 
         if(this.player.get_round_score() == 21){
             this.end_round(1);
