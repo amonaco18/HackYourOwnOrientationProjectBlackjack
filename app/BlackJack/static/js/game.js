@@ -19,8 +19,13 @@ class App{
 
         this.update_message(this.score_message);
 
+<<<<<<< HEAD
         document.getElementById("user_round_score").innerHTML = this.player.round_score;
         document.getElementById("cpu_round_score").innerHTML = this.computer.round_score - this.computer.hand[0].val;
+=======
+        document.getElementById("user_round_score").innerHTML = "Your score is currently: " + this.player.round_score;
+        document.getElementById("cpu_round_score").innerHTML = this.computer.round_score;
+>>>>>>> d0da0dd92d71d363e59d1892c414dc5ee8cf1208
 
         if(this.player.get_round_score() == 21){
             this.end_round(1);
@@ -35,7 +40,6 @@ class App{
 	update_message(mes){
 	    this.message = document.getElementById("messages").innerHTML = mes;
     }
-    
 
 	add_user_hand(){
 		var user_card = this.deck.remove_card();
@@ -52,7 +56,7 @@ class App{
 		//render card to screen
         user_hand.appendChild(new_img);
         
-        document.getElementById("user_round_score").innerHTML = this.player.round_score;
+        document.getElementById("user_round_score").innerHTML = "Your score is currently: " + this.player.round_score;
 	}
 
 	add_computer_hand(flip){
@@ -106,7 +110,7 @@ class App{
 		        this.add_computer_hand(flip);
 		        }
 		}catch(error){
-		     console.log("Reshuffling Deck..");
+		     update_info("Reshuffling Deck..");
 		     this.player.reset_hand();
 	         this.computer.reset_hand();
 		     this.deck = new Deck();
@@ -175,7 +179,7 @@ class App{
 	end_round(game_code){
 	    switch(game_code) {
             case 0:
-                console.log("Player busted at " + this.player.get_round_score());
+                update_info("Player busted at " + this.player.get_round_score());
                 this.computer.set_total_score();
                 this.player.reset_round_score();
                 this.computer.reset_round_score();
@@ -185,7 +189,7 @@ class App{
             break;
 
             case 1:
-                console.log("Player jackpot!");
+                update_info("Player jackpot!");
                 this.player.set_total_score();
                 this.player.reset_round_score();
                 this.computer.reset_round_score();
@@ -195,7 +199,7 @@ class App{
             break;
 
             case 2:
-                console.log("Computer busted at " + this.computer.get_round_score());
+                update_info("Computer busted at " + this.computer.get_round_score());
                 this.player.set_total_score();
                 this.computer.reset_round_score();
                 this.player.reset_round_score();
@@ -205,7 +209,7 @@ class App{
             break;
 
             case 3:
-                console.log("Computer jackpot!");
+                update_info("Computer jackpot!");
                 this.computer.set_total_score();
                 this.player.reset_round_score();
                 this.computer.reset_round_score();
@@ -215,9 +219,9 @@ class App{
             break;
 
             case 4:
-                console.log("Both players stand... calculating winner");
+                update_info("Both players stand... calculating winner");
                 if(this.player.get_round_score() > this.computer.get_round_score()){
-                    console.log("Player wins round! Player: " + this.player.get_round_score() + " Computer: " + this.computer.get_round_score());
+                    update_info("Player wins round! Player: " + this.player.get_round_score() + " Computer: " + this.computer.get_round_score());
                     this.player.set_total_score();
                     this.player.reset_round_score();
                     this.computer.reset_round_score();
@@ -225,7 +229,7 @@ class App{
                     this.reset_hands();
                     this.update_message("Player: " + this.player.get_total_score().toString() + " Computer: " + this.computer.get_total_score().toString());
                 } else if (this.player.get_round_score() < this.computer.get_round_score()){
-                    console.log("Computer wins round! Player: " + this.player.get_round_score() + " Computer: " + this.computer.get_round_score());
+                    update_info("Computer wins round! Player: " + this.player.get_round_score() + " Computer: " + this.computer.get_round_score());
                     this.computer.set_total_score();
                     this.player.reset_round_score();
                     this.computer.reset_round_score();
@@ -233,7 +237,7 @@ class App{
                     this.reset_hands();
                     this.update_message("Player: " + this.player.get_total_score().toString() + " Computer: " + this.computer.get_total_score().toString());
                 } else {
-                    console.log("Draw! Player: " + this.player.get_round_score() + " Computer: " + this.computer.get_round_score());
+                    update_info("Draw! Player: " + this.player.get_round_score() + " Computer: " + this.computer.get_round_score());
                     this.player.reset_round_score();
                     this.computer.reset_round_score();
                     this.player.set_is_turn(true);
@@ -246,6 +250,12 @@ class App{
 
 //end class
 }
+
+function update_info(info){
+        this.message = document.getElementById("game_info").innerHTML = info;
+        console.log(info);
+}
+
 
 window.addEventListener("load", () => {
 	app = new App();
@@ -288,14 +298,14 @@ document.getElementById("hit_btn").addEventListener("click", async function(){
         try{
             app.add_user_hand();
         } catch(error){
-            alert("Out of cards. Reshuffling..")
+            update_info("Out of cards. Reshuffling..")
             app.reset_hands();
         }
         await sleep(1000);
         flag = app.check_round_end();
         app.end_round(flag);
     } else {
-        alert("Hey.. not your turn.");
+        update_info("Hey.. not your turn.");
     }
 });
 
