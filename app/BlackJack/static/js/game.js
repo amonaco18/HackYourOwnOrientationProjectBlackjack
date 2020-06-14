@@ -14,6 +14,9 @@ class App{
 
         this.update_message(this.score_message);
 
+        document.getElementById("user_round_score").innerHTML = this.player.round_score;
+        document.getElementById("cpu_round_score").innerHTML = this.computer.round_score;
+
         if(this.player.get_round_score() == 21){
             this.end_round(1);
         }
@@ -26,7 +29,8 @@ class App{
 
 	update_message(mes){
 	    this.message = document.getElementById("messages").innerHTML = mes;
-	    }
+    }
+    
 
 	add_user_hand(){
 		var user_card = this.deck.remove_card();
@@ -41,7 +45,9 @@ class App{
 		new_img.setAttribute("src", user_card.get_img());
 
 		//render card to screen
-		user_hand.appendChild(new_img);
+        user_hand.appendChild(new_img);
+        
+        document.getElementById("user_round_score").innerHTML = this.player.round_score;
 	}
 
 	add_computer_hand(){
@@ -55,7 +61,9 @@ class App{
     	var new_img = document.createElement("IMG");
     	new_img.setAttribute("src", computer_card.get_img());
 
-    	computer_hand.appendChild(new_img);
+        computer_hand.appendChild(new_img);
+        
+        document.getElementById("cpu_round_score").innerHTML = this.computer.round_score;
 	}
 
 	reset_hands(){
