@@ -67,17 +67,24 @@ const QUEEN_SPADES = "static/imgs/SVG-cards-1.3/queen_of_spades.svg"
 class Card {
 
     constructor(src, val, s){
+        this.front_card_img = src;
         this.img_link = src;
         this.val = val;
         this.suite = s;
+        this.img_side = 2;
+        this.back_card_img = "static/imgs/back_of_card.svg";
     }
 
     ace_to_one(){
         this.val = 1;
     }
 
-    flip_card_img(){
-        this.img_link = "/static/imgs/";
+    flip_card_img_back(){
+        this.img_link = this.back_card_img;
+    }
+
+    flip_card_img_front(){
+        this.img_link = this.front_card_img;
     }
 
     get_img(){
@@ -172,11 +179,18 @@ class Deck{
             }
         }
 
+    face_cards(){
+        for ( var i = 0; i < this.cards.length; i++ ){
+            this.cards[i].flip_card_img_front();
+        }
+    }
+
     remove_card(){
 
         return this.cards.pop();
 
         }
+
 
     }
 

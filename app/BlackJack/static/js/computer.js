@@ -4,12 +4,16 @@ class Computer extends Player {
         super();
     }
 
-    make_decision(){
-        if(this.round_score < 17){
+    make_decision(player_two){
+        if(this.get_round_score() < 17 || this.get_round_score() < player_two.get_round_score()){
             return true;
         } else{
             return false;
         }
+    }
+
+    get_first_card(){
+        return this.hand[0];
     }
 
 }

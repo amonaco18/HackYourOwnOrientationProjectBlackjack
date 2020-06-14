@@ -17,11 +17,10 @@
 
 <body style="background-color: forestgreen;">
 
-  <div id="messages">
+<h3 id="messages"> </h3>
 
-  </div>
-
-  <div id="cpu_div" class="container-fluid fixed-top">
+  <div id="cpu_div" class="container-fluid ">
+    <h3>Dealer</h3>
     <div id="cpu_cards">
       <!-- add cards from deck here-->
     </div>
@@ -29,6 +28,7 @@
 
 
   <div id="user_div" class="container-fluid fixed-bottom">
+    <h3>Player</h3>
     <div id="user_cards">
      <!-- add cards from deck here-->
     </div>
@@ -46,7 +46,7 @@
       <button id="hit_btn" type="button" class="btn btn-dark">Hit</button>
       <button id="stand_btn" type="button" class="btn btn-dark">Stand</button>
     </div>
-    </div>
+  </div>
 
   <script src="{% static 'js/game.js' %}"></script>
   <script src="{% static 'js/cards.js' %}"></script>

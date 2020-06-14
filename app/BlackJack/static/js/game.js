@@ -9,7 +9,12 @@ class App{
 
 		for (var i = 0; i < 2; i++){
 		    this.add_user_hand();
-		    this.add_computer_hand();
+		    if(i==0){
+		        var flip = true;
+		    } else{
+		        var flip = false;
+		    }
+		    this.add_computer_hand(flip);
 		}
 
         this.update_message(this.score_message);
@@ -50,7 +55,7 @@ class App{
         document.getElementById("user_round_score").innerHTML = this.player.round_score;
 	}
 
-	add_computer_hand(){
+	add_computer_hand(flip){
 		var computer_card = this.deck.remove_card();
 
 		this.computer.set_hand(computer_card);
@@ -59,6 +64,11 @@ class App{
     	var computer_hand = document.getElementById("cpu_cards");
 
     	var new_img = document.createElement("IMG");
+
+    	if(flip == true){
+    	    computer_card.flip_card_img_back();
+    	    new_img.setAttribute("id", "flipped_card")
+    	}
     	new_img.setAttribute("src", computer_card.get_img());
 
         computer_hand.appendChild(new_img);
@@ -76,30 +86,70 @@ class App{
             user_hand.removeChild(user_hand.lastChild);
          }
 
-         var computer_hand = document.getElementById("cpu_cards");
-         while (computer_hand.firstChild) {
-            computer_hand.removeChild(computer_hand.lastChild);
-         }
+        var computer_hand = document.getElementById("cpu_cards");
+        while (computer_hand.firstChild) {
+           computer_hand.removeChild(computer_hand.lastChild);
+        }
 
-         //re-init hands
-         for (var i = 0; i < 2; i++){
-		    this.add_user_hand();
-		    this.add_computer_hand();
-		}
+        //re-init hands
+        try{
+            for (var i = 0; i < 2; i++){
+		        this.add_user_hand();
+		        if(i==0){
+		            var flip = true;
+		        } else{
+		            var flip = false;
+		        }
+		        this.add_computer_hand(flip);
+		        }
+		}catch(error){
+		     console.log("Reshuffling Deck..");
+		     this.player.reset_hand();
+	         this.computer.reset_hand();
+		     this.deck = new Deck();
+		     this.deck.face_cards();
+		     this.deck.shuffle();
 
+		     var user_hand = document.getElementById("user_cards");
+             while (user_hand.firstChild) {
+                 user_hand.removeChild(user_hand.lastChild);
+             }
+
+             var computer_hand = document.getElementById("cpu_cards");
+             while (computer_hand.firstChild) {
+                computer_hand.removeChild(computer_hand.lastChild);
+             }
+
+		     for (var i = 0; i < 2; i++){
+		        this.add_user_hand();
+		        if(i==0){
+		            var flip = true;
+		        } else{
+		            var flip = false;
+		        }
+		        this.add_computer_hand(flip);
+		        }
+		    }
 	}
 
-	on_stand(){
-	    var comp_decision = this.computer.make_decision();
+	async on_stand(){
+	    var img = document.getElementById("flipped_card");
+	    this.computer.get_first_card().flip_card_img_front();
+	    img.setAttribute("src", this.computer.get_first_card().get_img());
+
+        await sleep(200);
+
+	    var comp_decision = this.computer.make_decision(this.player);
 	    while(comp_decision == true){
-	        this.add_computer_hand();
-            comp_decision = this.computer.make_decision();
+	        await sleep(500);
+	        this.add_computer_hand(false);
+            comp_decision = this.computer.make_decision(this.player);
 	    }
 	}
 
 	check_round_end(){
 	    if (this.player.get_is_turn() == true){
-	        if(this.player.check_bust()){
+	        if(this.player.check_bust() == true){
 	            return 0;
 	        } else if(this.player.get_round_score() == 21){
 	            return 1;
@@ -120,7 +170,7 @@ class App{
 	end_round(game_code){
 	    switch(game_code) {
             case 0:
-                alert("Player busted at " + this.player.get_round_score());
+                console.log("Player busted at " + this.player.get_round_score());
                 this.computer.set_total_score();
                 this.player.reset_round_score();
                 this.computer.reset_round_score();
@@ -130,7 +180,7 @@ class App{
             break;
 
             case 1:
-                alert("Player jackpot!");
+                console.log("Player jackpot!");
                 this.player.set_total_score();
                 this.player.reset_round_score();
                 this.computer.reset_round_score();
@@ -140,7 +190,7 @@ class App{
             break;
 
             case 2:
-                alert("Computer busted at " + this.computer.get_round_score());
+                console.log("Computer busted at " + this.computer.get_round_score());
                 this.player.set_total_score();
                 this.computer.reset_round_score();
                 this.player.reset_round_score();
@@ -150,7 +200,7 @@ class App{
             break;
 
             case 3:
-                alert("Computer jackpot!");
+                console.log("Computer jackpot!");
                 this.computer.set_total_score();
                 this.player.reset_round_score();
                 this.computer.reset_round_score();
@@ -160,9 +210,9 @@ class App{
             break;
 
             case 4:
-                alert("Both players stand... calculating winner");
+                console.log("Both players stand... calculating winner");
                 if(this.player.get_round_score() > this.computer.get_round_score()){
-                    alert("Player wins round! Player: " + this.player.get_round_score() + " Computer: " + this.computer.get_round_score());
+                    console.log("Player wins round! Player: " + this.player.get_round_score() + " Computer: " + this.computer.get_round_score());
                     this.player.set_total_score();
                     this.player.reset_round_score();
                     this.computer.reset_round_score();
@@ -170,7 +220,7 @@ class App{
                     this.reset_hands();
                     this.update_message("Player: " + this.player.get_total_score().toString() + " Computer: " + this.computer.get_total_score().toString());
                 } else if (this.player.get_round_score() < this.computer.get_round_score()){
-                    alert("Computer wins round! Player: " + this.player.get_round_score() + " Computer: " + this.computer.get_round_score());
+                    console.log("Computer wins round! Player: " + this.player.get_round_score() + " Computer: " + this.computer.get_round_score());
                     this.computer.set_total_score();
                     this.player.reset_round_score();
                     this.computer.reset_round_score();
@@ -178,7 +228,7 @@ class App{
                     this.reset_hands();
                     this.update_message("Player: " + this.player.get_total_score().toString() + " Computer: " + this.computer.get_total_score().toString());
                 } else {
-                    alert("Draw! Player: " + this.player.get_round_score() + " Computer: " + this.computer.get_round_score());
+                    console.log("Draw! Player: " + this.player.get_round_score() + " Computer: " + this.computer.get_round_score());
                     this.player.reset_round_score();
                     this.computer.reset_round_score();
                     this.player.set_is_turn(true);
@@ -203,9 +253,18 @@ document.getElementById("stand_btn").addEventListener("click", async function(){
     if(app.player.get_is_turn() == true){
         app.player.set_is_turn(false);
         app.on_stand();
-        await sleep(200);
+        await sleep(3000);
         flag = app.check_round_end();
         app.end_round(flag);
+
+             if (app.computer.get_hand_length() > 2){
+                           var computer_hand = document.getElementById("cpu_cards");
+                            while (app.computer.get_hand_length() > 2) {
+                                app.computer.remove_card();
+                                computer_hand.removeChild(computer_hand.lastChild);
+                            }
+                    }
+
     } else {
         alert("Hey.. not your turn.");
     }
@@ -213,14 +272,17 @@ document.getElementById("stand_btn").addEventListener("click", async function(){
 
 document.getElementById("hit_btn").addEventListener("click", async function(){
     if(app.player.get_is_turn() == true) {
-        app.add_user_hand();
-        await sleep(200);
+        try{
+            app.add_user_hand();
+        } catch(error){
+            alert("Out of cards. Reshuffling..")
+            app.reset_hands();
+        }
+        await sleep(2200);
         flag = app.check_round_end();
         app.end_round(flag);
     } else {
         alert("Hey.. not your turn.");
     }
 });
-
-
 

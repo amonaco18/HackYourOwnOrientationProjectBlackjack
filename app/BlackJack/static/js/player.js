@@ -16,7 +16,21 @@ class Player{
         this.hand.length = 0;
     }
 
+    get_hand_length(){
+        return this.hand.length;
+    }
+
+    remove_card(){
+        this.hand.pop()
+    }
+
     check_bust(){
+        for (var i = 0; i < this.hand.length; i++){
+            if (this.hand[i].get_val() == 11 && this.round_score > 21){
+                this.hand[i].ace_to_one();
+                this.round_score -= 10;
+            }
+        }
         var bust = false;
         if (this.round_score > 21){
             bust = true;
