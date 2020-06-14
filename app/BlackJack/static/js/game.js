@@ -210,14 +210,6 @@ class App{
                     this.computer.reset_round_score();
                     this.player.set_is_turn(true);
                     this.reset_hands();
-                    //random bug patch..
-                    if (this.computer.get_hand_length() > 2){
-                           var computer_hand = document.getElementById("cpu_cards");
-                            while (this.computer.get_hand_length() > 2) {
-                                this.computer.remove_card();
-                                computer_hand.removeChild(computer_hand.lastChild);
-                            }
-                    }
                     this.update_message("Player: " + this.player.get_total_score().toString() + " Computer: " + this.computer.get_total_score().toString());
                 } else if (this.player.get_round_score() < this.computer.get_round_score()){
                     console.log("Computer wins round! Player: " + this.player.get_round_score() + " Computer: " + this.computer.get_round_score());
@@ -253,9 +245,18 @@ document.getElementById("stand_btn").addEventListener("click", async function(){
     if(app.player.get_is_turn() == true){
         app.player.set_is_turn(false);
         app.on_stand();
-        await sleep(3600);
+        await sleep(3000);
         flag = app.check_round_end();
         app.end_round(flag);
+
+             if (app.computer.get_hand_length() > 2){
+                           var computer_hand = document.getElementById("cpu_cards");
+                            while (app.computer.get_hand_length() > 2) {
+                                app.computer.remove_card();
+                                computer_hand.removeChild(computer_hand.lastChild);
+                            }
+                    }
+
     } else {
         alert("Hey.. not your turn.");
     }
@@ -269,7 +270,7 @@ document.getElementById("hit_btn").addEventListener("click", async function(){
             alert("Out of cards. Reshuffling..")
             app.reset_hands();
         }
-        await sleep(1800);
+        await sleep(2200);
         flag = app.check_round_end();
         app.end_round(flag);
     } else {
