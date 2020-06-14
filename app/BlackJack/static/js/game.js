@@ -273,7 +273,6 @@ document.getElementById("stand_btn").addEventListener("click", async function(){
             app.end_round(3);
         }
 
-
     } else {
         alert("Hey.. not your turn.");
     }
