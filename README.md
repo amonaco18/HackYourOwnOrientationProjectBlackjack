@@ -13,6 +13,4 @@ application in the app/BlackJack folder
 app/BlackJack/static contains javascript and styling
 app/BlackJack/templates contains html
 routing and response rendering in app/BlackJack/urls.py and /app/BlackJack/views.py
-django configuration and settings in the app/app/ directory
-
-**this document is incomplete
+django configuration and settings in the app/app/ folder
